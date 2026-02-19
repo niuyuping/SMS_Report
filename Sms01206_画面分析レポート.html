@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SMS01206 画面分析レポート</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: min(1400px, 98vw);
+      width: 100%;
+      box-sizing: border-box;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      padding-top: 1.5rem;
+      padding-bottom: 2rem;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+        max-width: 100%;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    table{border-collapse: collapse; width: 100%; margin: 1em 0;}
+    th,td{border: 1px solid #ccc; padding: 0.4em 0.6em; text-align: left;}
+    th{background: #f0f0f0;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">SMS01206 画面分析レポート</h1>
+</header>
+<p>凡例：<strong>✅</strong>＝あり（緑）、<strong>❌</strong>＝なし（赤）。</p>
+<hr />
+<h3 id="概要">概要</h3>
+<h4 id="対比データ集計表">対比データ集計表</h4>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 5%" />
+<col style="width: 3%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr>
+<th>対比観点</th>
+<th>原版</th>
+<th>新版</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>画面数</td>
+<td>16</td>
+<td>4</td>
+<td>新版は list / createForm / createConfirm / detail の4画面</td>
+</tr>
+<tr>
+<td>インターフェース数（RMI/HTTP）</td>
+<td>69</td>
+<td>59</td>
+<td>原版 OrderEntryNo_i は RMI メソッド 69 個；新版で 59 個暴露、10
+個未暴露または形態差異</td>
+</tr>
+<tr>
+<td>ダイアログ（Dialog）</td>
+<td>✅ 12+</td>
+<td>❌</td>
+<td>新版は独立画面として持たず画面内で代替</td>
+</tr>
+</tbody>
+</table>
+<h4 id="欠落割合表">欠落割合表</h4>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 5%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr>
+<th>項目</th>
+<th>原版数</th>
+<th>新版対応数</th>
+<th>欠落数</th>
+<th>欠落率（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>画面</td>
+<td>16</td>
+<td>4</td>
+<td>12</td>
+<td>75.0</td>
+</tr>
+<tr>
+<td>機能・インタラクション（大項目）</td>
+<td>16</td>
+<td>4</td>
+<td>12</td>
+<td>75.0</td>
+</tr>
+<tr>
+<td>インターフェース（未暴露分）</td>
+<td>69</td>
+<td>59</td>
+<td>10</td>
+<td>約14（原版インターフェース総数 69 に対する％）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="完成度表">完成度表</h4>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 14%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr>
+<th>観点</th>
+<th>完成度（%）</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>画面の有無</td>
+<td>25</td>
+<td>4/16 画面のみ新版に存在</td>
+</tr>
+<tr>
+<td>機能・インタラクション</td>
+<td>約30</td>
+<td>一覧・登録・確認・明細の基本フローのみ</td>
+</tr>
+<tr>
+<td>データ制約</td>
+<td>約40</td>
+<td>共通チェックは一部実装、画面別細則は未完全</td>
+</tr>
+<tr>
+<td>インターフェース暴露</td>
+<td>約86</td>
+<td>69 中 59 暴露、10 件未暴露または形態差異</td>
+</tr>
+</tbody>
+</table>
+<h4 id="総合完成度">総合完成度</h4>
+<ul>
+<li><strong>総合完成度：約35%</strong>（画面・機能・データ・インターフェースを加重で集計した場合の目安）。</li>
+</ul>
+<p><strong>完成度計算の内訳（目安）</strong></p>
+<ul>
+<li>画面：16 中 4 対応 → 25%。加重 40% とすると 10%。</li>
+<li>機能・インタラクション：基本フロー 4 画面で実装 → 約 30%。加重 35%
+とすると 10.5%。</li>
+<li>データ制約：共通＋一部画面で実装 → 約 40%。加重 15% とすると
+6%。</li>
+<li>インターフェース：69 中 10 未暴露または形態差異 → 約 86%
+暴露（59/69）。加重 10% とすると 8.6%。</li>
+<li>合計（例）：10 + 10.5 + 6 + 8.6 ≈ 35.1 →
+<strong>約35%</strong>。</li>
+</ul>
+<hr />
+<h3 id="一対比総覧">一、対比総覧</h3>
+<h4 id="画面の有無">1.1 画面の有無</h4>
+<table>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 43%" />
+<col style="width: 5%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>No.</th>
+<th>原版画面（クラス/画面名）</th>
+<th>新版</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>OrderEntryNo（メイン）</td>
+<td>⚠️</td>
+<td>createForm / detail で代替</td>
+</tr>
+<tr>
+<td>2</td>
+<td>DistributeOrderDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>DeployOrderDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>DeployDistributeDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>TaxDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>ConsignDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>OutinDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>ProductDialog</td>
+<td>⚠️</td>
+<td>createForm 内で代替</td>
+</tr>
+<tr>
+<td>9</td>
+<td>ForwardRequestDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>RankDecisionDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>FactoryNumberDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>ReplyDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>ConfirmDialog</td>
+<td>✅</td>
+<td>createConfirm</td>
+</tr>
+<tr>
+<td>14</td>
+<td>comformDialog</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>15</td>
+<td>（その他共通ダイアログ）</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Dialog1（待機等）</td>
+<td>❌</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="機能とデータ制約">1.2 機能とデータ制約</h4>
+<p>以下は原版コードの <strong>14
+画面</strong>を基準とする（OrderEntryNo.java におけるメイン画面 1 ＋
+Dialog メンバ変数
+13）。画面ごとに原版の機能・データ制約・新版での対応を記載。根拠：OrderEntryNo
+のメンバ dialog_ / dialog2_～dialog6_ / productDialog_ / forwardDialog_
+/ rankDecisionDialog_ / factoryDialog_ / replyDialog_ / waitDialog_
+およびメイン画面本体。<strong>完成度は画面・交互・データ制約のみで評価し、後端
+API の単独存在は評価に含めない。</strong></p>
+<table>
+<colgroup>
+<col style="width: 0%" />
+<col style="width: 8%" />
+<col style="width: 48%" />
+<col style="width: 17%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr>
+<th>No.</th>
+<th>原版画面（クラス/メンバ）</th>
+<th>原版の機能</th>
+<th>原版のデータ制約</th>
+<th>新版での対応</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>OrderEntryNo（メイン画面）</td>
+<td>一覧：searchButton_ で取得、table_ に表示、RMI
+でリスト取得。登録/編集：entryNo_ / customerChoice_ / productChoice_ /
+chargeChoice_ / deliveryChoice_ 等入力；insertButton_ / collectButton_
+等で orderInsert / getOrder 等 RMI。明細：行選択後 getOrder(entryNo)
+で表示。</td>
+<td>検索・ページングは RMI
+パラメータで決定。得意先・機種・数量・出荷依頼・配送先・担当等必須。it_common（L_*）長さ。画面と
+RMI 双方でチェック。</td>
+<td><strong>65%</strong>（list/createForm/detail
+で一覧・登録・編集・明細の主流程をカバー；与信/枝番/担当/配送先/機種等に対応；一部業務チェック・独立
+Dialog 形態は未還元）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>DistributeOrderDialog（dialog_）</td>
+<td>分配オーダー：table_、checkButton_、number_。getDistributeDeploy /
+distributeDeploy でメインと連携。</td>
+<td>分配・展開関連業務テーブル。メインと共通必須項目。</td>
+<td><strong>0%</strong>（createForm に分配ポップアップ・フローなし；後端
+API の単独存在は計上しない）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>DeployOrderDialog（dialog2_）</td>
+<td>展開オーダー：getDeployEntry、isDeployPriceMaster
+でメインと連携。</td>
+<td>展開用業務テーブル。展開条件・対象。</td>
+<td><strong>0%</strong>（独立展開ポップアップ・setValue/show
+フローなし；後端 API の単独存在は計上しない）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>DeployDistributeDialog（dialog3_）</td>
+<td>展開・分配一括：getDistributeDeploy、distributeDeploy、getDeployEntry。</td>
+<td>展開・分配関連パラメータ。</td>
+<td><strong>0%</strong>（一括展開・分配 UI 未実装；後端 API
+の単独存在は計上しない）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>TaxDialog（dialog4_）</td>
+<td>税率・税区分設定：getPrice、getMultiRate 等で税計算と連動。</td>
+<td>税マスタ・単価マスタ。税率範囲。</td>
+<td><strong>35%</strong>（単価・税率は createForm
+表内に表示；独立税区分選択ポップアップなし）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ConsignDialog（dialog5_）</td>
+<td>出荷依頼・配送先：consign_、consignN_、address_、section_、tel_。getConsigns、getDefaultConsigns。</td>
+<td>配送先・出荷依頼先コード形式。メインと一致。</td>
+<td><strong>60%</strong>（createForm 内
+openConsignDialog、getConsigns/getDefaultConsigns、選択結果をフォームに反映；独立
+Dialog 形態なし）</td>
+</tr>
+<tr>
+<td>7</td>
+<td>OutinDialog（dialog6_）</td>
+<td>入出庫：getOutInData、updateOutinData。</td>
+<td>入出庫データ形式。</td>
+<td><strong>10%</strong>（前渡ポップアップ内で入出庫データ表示のみ；独立入出庫画面・updateOutinData
+操作なし；API は計上しない）</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ProductDialog（productDialog_）</td>
+<td>製品/機種選択：getProductDialogMaster（SALES/PATTERN/LABEL）。選択結果をメインに返す。</td>
+<td>製品コード・得意先別製品。</td>
+<td><strong>50%</strong>（createForm 内機種ドロップダウン
+getCustomerProducts、getPrice/judgmentStopProduct
+等；SALES/PATTERN/LABEL 独立選択ポップアップなし）</td>
+</tr>
+<tr>
+<td>9</td>
+<td>ForwardRequestDialog（forwardDialog_）</td>
+<td>前渡し依頼：getForwardDialogMaster、getForwadingListHtml、getCustomerForwardReadTime。setValue/getValue。</td>
+<td>前渡し依頼関連。</td>
+<td><strong>55%</strong>（openForwardDialog、getForwadingListHtml/setFactoryResults/出荷計画等；前渡フローは
+createForm に内嵌）</td>
+</tr>
+<tr>
+<td>10</td>
+<td>RankDecisionDialog（rankDecisionDialog_）</td>
+<td>ランク決定：getRankDialogMaster。setValue/getValue、isConfirm。</td>
+<td>ランク選択。</td>
+<td><strong>35%</strong>（createForm
+内でランク関連データを利用；独立ランク選択画面なし；API
+単独存在は計上しない）</td>
+</tr>
+<tr>
+<td>11</td>
+<td>FactoryNumberDialog（factoryDialog_）</td>
+<td>工場番号入力：setFactoryResults でメインと連携。</td>
+<td>工場番号・実績関連。</td>
+<td><strong>50%</strong>（前渡ポップアップ内 confirmFactoryResults で
+setFactoryResults を呼出；工場番号・出荷確定を一部実装）</td>
+</tr>
+<tr>
+<td>12</td>
+<td>ReplyDialog（replyDialog_）</td>
+<td>メッセージ/返信表示：setValue(replys_)、getValue()。サーバインターフェースはほぼなし。</td>
+<td>表示のみ。</td>
+<td><strong>10%</strong>（新版に返信表示専用画面なし）</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Dialog1（waitDialog_）</td>
+<td>待機表示（非モーダル）：setTitle(“4667”)。RMI 前後で
+show/dispose。</td>
+<td>なし。UI 表示のみ。</td>
+<td><strong>0%</strong>（対応なし；待機はフロントで任意処理）</td>
+</tr>
+<tr>
+<td>14</td>
+<td>確認（displayConfirmDialog）</td>
+<td>原版のインライン確認：displayConfirmDialog(key) で JOptionPane
+等により INSERT/UPDATE/DELETE/ERR 等のはい/いいえ選択。独立した
+ConfirmDialog インスタンスはなし。</td>
+<td>key の MSG_* メッセージに依存。クライアント選択結果のみ。</td>
+<td><strong>85%</strong>（createConfirm 画面で登録前確認に対応；MSG
+キー・細部は一部差異の可能性）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="インターフェース対比">1.3 インターフェース対比</h4>
+<p>以下は原版
+<strong>OrderEntryNo_i</strong>（RMI）の<strong>全インターフェース</strong>を基準に、新版
+SmsWebApi（HTTP
+POST）と逐項対比したもの。根拠：Sms01206/OrderEntryNo_i.java
+に宣言された全メソッド。関与画面は 1.2 の No.1～14。</p>
+<p><strong>原版暴露済（新版に同名または等価な HTTP POST
+あり）</strong></p>
+<table>
+<colgroup>
+<col style="width: 2%" />
+<col style="width: 26%" />
+<col style="width: 22%" />
+<col style="width: 4%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr>
+<th>No.</th>
+<th>原版インターフェース名（RMI）</th>
+<th>用途（原版コメント/コード）</th>
+<th>関与画面</th>
+<th>新版での対応</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>getPrice</td>
+<td>販価マスタ検索</td>
+<td>1,5,8</td>
+<td>✅ POST /websms01206/getPrice</td>
+</tr>
+<tr>
+<td>2</td>
+<td>getRankDialogMaster</td>
+<td>ランク決定 Dialog 検索</td>
+<td>10</td>
+<td>✅ POST /websms01206/getRankDialogMaster</td>
+</tr>
+<tr>
+<td>3</td>
+<td>getEntryNo</td>
+<td>エントリー No. 採番</td>
+<td>1</td>
+<td>✅ POST /websms01206/getEntryNo</td>
+</tr>
+<tr>
+<td>4</td>
+<td>getOrder</td>
+<td>エントリー No.＆サブ No. よりオーダー取得</td>
+<td>1</td>
+<td>✅ POST /websms01206/getOrder</td>
+</tr>
+<tr>
+<td>5</td>
+<td>getVari</td>
+<td>扱い区分検索</td>
+<td>1</td>
+<td>✅ POST /websms01206/getVari</td>
+</tr>
+<tr>
+<td>6</td>
+<td>getConsigns</td>
+<td>得意先コードより配送先一覧</td>
+<td>1,6</td>
+<td>✅ POST /websms01206/getConsigns</td>
+</tr>
+<tr>
+<td>7</td>
+<td>getCharges</td>
+<td>担当者コード検索</td>
+<td>1</td>
+<td>✅ POST /websms01206/getCharges</td>
+</tr>
+<tr>
+<td>8</td>
+<td>getChargeCustomers</td>
+<td>得意先マスタより担当者一致</td>
+<td>1</td>
+<td>✅ POST /websms01206/getChargeCustomers</td>
+</tr>
+<tr>
+<td>9</td>
+<td>getCustomerProducts</td>
+<td>販価マスタより得意先別</td>
+<td>1,8</td>
+<td>✅ POST /websms01206/getCustomerProducts</td>
+</tr>
+<tr>
+<td>10</td>
+<td>getCustomers</td>
+<td>得意先コード検索</td>
+<td>1</td>
+<td>✅ POST /websms01206/getCustomers</td>
+</tr>
+<tr>
+<td>11</td>
+<td>getProducts</td>
+<td>機種一覧検索</td>
+<td>1,8</td>
+<td>✅ POST /websms01206/getProducts</td>
+</tr>
+<tr>
+<td>12</td>
+<td>getUses</td>
+<td>用途検索</td>
+<td>1</td>
+<td>✅ POST /websms01206/getUses</td>
+</tr>
+<tr>
+<td>13</td>
+<td>getNpmEntry</td>
+<td>機展書 DB 検索</td>
+<td>1,8</td>
+<td>✅ POST /websms01206/getNpmEntry</td>
+</tr>
+<tr>
+<td>14</td>
+<td>orderInsert</td>
+<td>オーダー登録</td>
+<td>1</td>
+<td>✅ POST /websms01206/orderInsert</td>
+</tr>
+<tr>
+<td>15</td>
+<td>orderUpdate</td>
+<td>オーダー更新</td>
+<td>1</td>
+<td>✅ POST /websms01206/orderUpdate</td>
+</tr>
+<tr>
+<td>16</td>
+<td>orderDelete</td>
+<td>オーダー削除</td>
+<td>1</td>
+<td>✅ POST /websms01206/orderDelete</td>
+</tr>
+<tr>
+<td>17</td>
+<td>getSupplys</td>
+<td>納入先テーブル検索</td>
+<td>1</td>
+<td>✅ POST /websms01206/getSupplys</td>
+</tr>
+<tr>
+<td>18</td>
+<td>judgmentERP</td>
+<td>ERP 連携機種判定</td>
+<td>1</td>
+<td>✅ POST /websms01206/judgmentERP</td>
+</tr>
+<tr>
+<td>19</td>
+<td>moveR3</td>
+<td>R3 移行</td>
+<td>1</td>
+<td>✅ POST /websms01206/moveR3</td>
+</tr>
+<tr>
+<td>20</td>
+<td>isHoliday</td>
+<td>休日チェック</td>
+<td>1</td>
+<td>✅ POST /websms01206/isHoliday</td>
+</tr>
+<tr>
+<td>21</td>
+<td>isUnitPriceMaster</td>
+<td>機種コード販価存在</td>
+<td>1</td>
+<td>✅ POST /websms01206/isUnitPriceMaster</td>
+</tr>
+<tr>
+<td>22</td>
+<td>getMakerMaster</td>
+<td>メーカーマスタ検索</td>
+<td>1</td>
+<td>✅ POST /websms01206/getMakerMaster</td>
+</tr>
+<tr>
+<td>23</td>
+<td>getPriceCodeMaster</td>
+<td>販価決定区分検索</td>
+<td>1</td>
+<td>✅ POST /websms01206/getPriceCodeMaster</td>
+</tr>
+<tr>
+<td>24</td>
+<td>updatePriceCode</td>
+<td>販価決定区分更新</td>
+<td>1</td>
+<td>✅ POST /websms01206/updatePriceCode</td>
+</tr>
+<tr>
+<td>25</td>
+<td>getExcelData</td>
+<td>Excel 出力 data 検索</td>
+<td>1</td>
+<td>✅ POST /websms01206/getExcelData</td>
+</tr>
+<tr>
+<td>26</td>
+<td>getNpmLine</td>
+<td>機展書 DB コメント</td>
+<td>1</td>
+<td>✅ POST /websms01206/getNpmLine</td>
+</tr>
+<tr>
+<td>27</td>
+<td>getKoOrder</td>
+<td>同梱品子エントリー</td>
+<td>1</td>
+<td>✅ POST /websms01206/getKoOrder</td>
+</tr>
+<tr>
+<td>28</td>
+<td>isDeployPriceMaster</td>
+<td>継続プラント販価存在</td>
+<td>1,3,4</td>
+<td>✅ POST /websms01206/isDeployPriceMaster</td>
+</tr>
+<tr>
+<td>29</td>
+<td>getDeployEntry</td>
+<td>継続プラントエントリー取得</td>
+<td>1,3,4</td>
+<td>✅ POST /websms01206/getDeployEntry</td>
+</tr>
+<tr>
+<td>30</td>
+<td>getDistributeDeploy</td>
+<td>会社間派生データ取得</td>
+<td>1,2,4</td>
+<td>✅ POST /websms01206/getDistributeDeploy</td>
+</tr>
+<tr>
+<td>31</td>
+<td>distributeDeploy</td>
+<td>会社間派生処理</td>
+<td>1,2,4</td>
+<td>✅ POST /websms01206/distributeDeploy</td>
+</tr>
+<tr>
+<td>32</td>
+<td>updateSmsStatus</td>
+<td>R/3 移行成立ステータス設定</td>
+<td>1</td>
+<td>✅ POST /websms01206/updateSmsStatus</td>
+</tr>
+<tr>
+<td>33</td>
+<td>updateSmsStatusClear</td>
+<td>ステータスクリア</td>
+<td>1</td>
+<td>✅ POST /websms01206/updateSmsStatusClear</td>
+</tr>
+<tr>
+<td>34</td>
+<td>getConporison</td>
+<td>製品区分検索（機種マスタ）</td>
+<td>1</td>
+<td>✅ POST /websms01206/getConporison</td>
+</tr>
+<tr>
+<td>35</td>
+<td>updateKoOrder</td>
+<td>同梱品親子修正</td>
+<td>1</td>
+<td>✅ POST /websms01206/updateKoOrder</td>
+</tr>
+<tr>
+<td>36</td>
+<td>getOyaOrder</td>
+<td>同梱品親エントリー</td>
+<td>1</td>
+<td>✅ POST /websms01206/getOyaOrder</td>
+</tr>
+<tr>
+<td>37</td>
+<td>judgmentStopProduct</td>
+<td>廃機種判定</td>
+<td>1</td>
+<td>✅ POST /websms01206/judgmentStopProduct</td>
+</tr>
+<tr>
+<td>38</td>
+<td>getPSSPeriodProduct</td>
+<td>生販調整確定期間 DB</td>
+<td>1</td>
+<td>✅ POST /websms01206/getPSSPeriodProduct</td>
+</tr>
+<tr>
+<td>39</td>
+<td>getQSeihinHash</td>
+<td>ビジネスユニット製品区分</td>
+<td>1</td>
+<td>✅ POST /websms01206/getQSeihinHash</td>
+</tr>
+<tr>
+<td>40</td>
+<td>judgementCustomerConfidence</td>
+<td>得意先与信管理判定</td>
+<td>1</td>
+<td>✅ POST /websms01206/judgementCustomerConfidence</td>
+</tr>
+<tr>
+<td>41</td>
+<td>reloadCustomerConfidence</td>
+<td>与信判定再取得</td>
+<td>1</td>
+<td>✅ POST /websms01206/reloadCustomerConfidence</td>
+</tr>
+<tr>
+<td>42</td>
+<td>getProductPlant</td>
+<td>機種別プラント取得</td>
+<td>1</td>
+<td>✅ POST /websms01206/getProductPlant</td>
+</tr>
+<tr>
+<td>43</td>
+<td>getNpmProductDivision</td>
+<td>機展書 DB 製品区分</td>
+<td>1</td>
+<td>✅ POST /websms01206/getNpmProductDivision</td>
+</tr>
+<tr>
+<td>44</td>
+<td>getActiveDate</td>
+<td>指定日から稼動日取得</td>
+<td>1</td>
+<td>✅ POST /websms01206/getActiveDate</td>
+</tr>
+<tr>
+<td>45</td>
+<td>getTransportList</td>
+<td>法人別輸送手段マスタ</td>
+<td>1</td>
+<td>✅ POST /websms01206/getTransportList</td>
+</tr>
+<tr>
+<td>46</td>
+<td>getOutInData</td>
+<td>OUT-IN 連携オーダー情報</td>
+<td>1,7</td>
+<td>✅ POST /websms01206/getOutInData</td>
+</tr>
+<tr>
+<td>47</td>
+<td>getMultiRate</td>
+<td>換算レート取得</td>
+<td>1,5</td>
+<td>✅ POST /websms01206/getMultiRate</td>
+</tr>
+<tr>
+<td>48</td>
+<td>updateOutinData</td>
+<td>OUT-IN 連携データ更新</td>
+<td>1,7</td>
+<td>✅ POST /websms01206/updateOutinData</td>
+</tr>
+<tr>
+<td>49</td>
+<td>getDefaultConsigns</td>
+<td>得意先より扱い/配送先/納入先初期値</td>
+<td>1,6</td>
+<td>✅ POST /websms01206/getDefaultConsigns</td>
+</tr>
+<tr>
+<td>50</td>
+<td>getForwadingListHtml</td>
+<td>出荷依頼表作成</td>
+<td>9</td>
+<td>✅ POST /websms01206/getForwadingListHtml</td>
+</tr>
+<tr>
+<td>51</td>
+<td>setFactoryResults</td>
+<td>無償試作出荷実績登録</td>
+<td>11</td>
+<td>✅ POST /websms01206/setFactoryResults</td>
+</tr>
+<tr>
+<td>52</td>
+<td>getMaxSalesUpdate</td>
+<td>エントリー No. 別最終更新日</td>
+<td>1</td>
+<td>✅ POST /websms01206/getMaxSalesUpdate</td>
+</tr>
+<tr>
+<td>53</td>
+<td>judgementNNSN</td>
+<td>NNSN 判定</td>
+<td>1</td>
+<td>✅ POST /websms01206/judgementNNSN</td>
+</tr>
+<tr>
+<td>54</td>
+<td>isDuplicationOrder</td>
+<td>OrderNo 重複チェック</td>
+<td>1</td>
+<td>✅ POST /websms01206/isDuplicationOrder</td>
+</tr>
+<tr>
+<td>55</td>
+<td>isDuplicationOrder2</td>
+<td>金型品目重複チェック</td>
+<td>1</td>
+<td>✅ POST /websms01206/isDuplicationOrder2</td>
+</tr>
+<tr>
+<td>56</td>
+<td>getCustomerForwardReadTime</td>
+<td>得意先別出荷リードタイム</td>
+<td>9</td>
+<td>✅ POST /websms01206/getCustomerForwardReadTime</td>
+</tr>
+<tr>
+<td>57</td>
+<td>getProductFromCustomerProduct</td>
+<td>得意先機種より機種コード</td>
+<td>1,8</td>
+<td>✅ POST /websms01206/getProductFromCustomerProduct</td>
+</tr>
+<tr>
+<td>58</td>
+<td>getInvoiceNoCount</td>
+<td>同一インボイス No. エントリー数</td>
+<td>1</td>
+<td>✅ POST /websms01206/getInvoiceNoCount</td>
+</tr>
+<tr>
+<td>59</td>
+<td>getTurnoverDate</td>
+<td>売上日取得（収益認識）</td>
+<td>1</td>
+<td>✅ POST /websms01206/getTurnoverDate</td>
+</tr>
+</tbody>
+</table>
+<p><strong>原版未暴露または形態差異</strong></p>
+<table>
+<colgroup>
+<col style="width: 1%" />
+<col style="width: 13%" />
+<col style="width: 22%" />
+<col style="width: 3%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>No.</th>
+<th>原版インターフェース名（RMI）</th>
+<th>用途（原版）</th>
+<th>関与画面</th>
+<th>新版での状況</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>60</td>
+<td>getLabelString</td>
+<td>ラベル文字列取得（画面/多言語）</td>
+<td>1,2～12</td>
+<td>❌ 未暴露。新版に等価なラベル/多言語専用 API なし</td>
+</tr>
+<tr>
+<td>61</td>
+<td>getSales</td>
+<td>他社向販売検索（ProductDialog 用）</td>
+<td>1,8</td>
+<td>❌ 未暴露。新版 getProducts は形態が異なる</td>
+</tr>
+<tr>
+<td>62</td>
+<td>getPattern</td>
+<td>生産パターン検索（ProductDialog 用）</td>
+<td>1,8</td>
+<td>❌ 未暴露</td>
+</tr>
+<tr>
+<td>63</td>
+<td>insert</td>
+<td>販価マスタ登録（追加）</td>
+<td>1,8</td>
+<td>❌ 未暴露。販価マスタ専用</td>
+</tr>
+<tr>
+<td>64</td>
+<td>update</td>
+<td>販価マスタ登録（更新）</td>
+<td>1,8</td>
+<td>❌ 未暴露。販価マスタ専用</td>
+</tr>
+<tr>
+<td>65</td>
+<td>getProductDialogMaster</td>
+<td>機種・得意先 Dialog 用（SALES/PATTERN/LABEL）</td>
+<td>8</td>
+<td>⚠️ 形態差異。新版は getProducts / getCustomerProducts
+等の組み合わせで代替、単一の等価なし</td>
+</tr>
+<tr>
+<td>66</td>
+<td>getForwardDialogMaster</td>
+<td>出荷依頼票 Dialog 用検索</td>
+<td>9</td>
+<td>⚠️ 形態差異。新版は getForwadingListHtml /
+getCustomerForwardReadTime はあるが getForwardDialogMaster なし</td>
+</tr>
+<tr>
+<td>67</td>
+<td>getOrderSub</td>
+<td>エントリー No. よりオーダーテーブル検索（一覧用）</td>
+<td>1</td>
+<td>⚠️ 形態差異。新版は GET list または
+getOrder。検索パラメータ/返却構造が異なる</td>
+</tr>
+<tr>
+<td>68</td>
+<td>getConsign</td>
+<td>配送先テーブル単件検索</td>
+<td>1,6</td>
+<td>❌ 未暴露。新版は getConsigns / getDefaultConsigns のみ</td>
+</tr>
+<tr>
+<td>69</td>
+<td>getUnitPrice</td>
+<td>販価マスタ検索（030708 追加）</td>
+<td>1</td>
+<td>⚠️ 形態差異。新版は
+getPrice。名称・パラメータが一致しない可能性</td>
+</tr>
+</tbody>
+</table>
+<p>以上：原版 OrderEntryNo_i は <strong>69 個の RMI
+メソッド</strong>。このうち <strong>59
+個</strong>は新版に同名または等価な HTTP POST が暴露され、<strong>10
+個</strong>は未暴露または形態差異（上表
+60～69）。未暴露/形態差異は原版インターフェース総数の <strong>約
+14%</strong>。</p>
+<h4 id="各画面のインタラクションとデータ制約">1.4
+各画面のインタラクションとデータ制約</h4>
+<p>以下は原版 <strong>OrderEntryNo.java</strong> のコードに基づき、14
+画面ごとにインタラクションを記載。根拠はボタンイベント・display*
+メソッド・remoteObject_ 呼び出し。</p>
+<table>
+<colgroup>
+<col style="width: 0%" />
+<col style="width: 6%" />
+<col style="width: 87%" />
+<col style="width: 4%" />
+</colgroup>
+<thead>
+<tr>
+<th>No.</th>
+<th>原版画面（クラス/メンバ）</th>
+<th>インタラクションとデータ制約</th>
+<th>新版対応</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>OrderEntryNo（メイン画面）</td>
+<td><strong>一覧</strong>：searchButton_… → confirm(“update”) 後
+searchEntryNo()。 <strong>登録</strong>：insertButton_… →
+insert(“insertButton”)、チェック後 orderInsert。
+<strong>編集</strong>：updateButton_… → displayConfirmDialog(MSG_UPDATE)
+後 orderUpdate。 <strong>明細</strong>：行選択後 getOrder(entryNo,
+subNo)。 <strong>配送先/製品/出荷依頼/ランク/削除</strong>：各ボタン →
+displayConsignDialog / displayProductDialog / displayForwardDialog /
+displayRankDecisionDialog / displayConfirmDialog(MSG_DELETE) 後
+orderDelete。 データ制約：検索は getOrderSub
+のパラメータで決定。得意先・機種・数量・出荷依頼・配送先・担当等必須。it_common
+長さ。画面と RMI 双方でチェック。与信・休日・NNSN・重複等。</td>
+<td>✅ list / createForm / detail</td>
+</tr>
+<tr>
+<td>2</td>
+<td>DistributeOrderDialog（dialog_）</td>
+<td>collectButton フロー内：テーブル行・枝番を整え
+dialog_.setValue2(parameter)、setTitle(title)、dialog_.show()（約
+9648～9654 行）。
+データ制約：分配・展開業務テーブル。メインと共通必須項目。生販調整確定機種、OUT-IN
+派生、与信 8、セキュリティ等。</td>
+<td>❌ createForm 内で代替</td>
+</tr>
+<tr>
+<td>3</td>
+<td>DeployOrderDialog（dialog2_）</td>
+<td>展開フロー内で displayDeployOrderDialog(hantei, tbl, buttonKbn)
+または displayDeployOrderDialog2(vector, buttonKbn)。
+データ制約：展開用業務テーブル。販価マスタチェック。展開パラメータ・buttonKbn。</td>
+<td>❌ createForm 内で代替</td>
+</tr>
+<tr>
+<td>4</td>
+<td>DeployDistributeDialog（dialog3_）</td>
+<td>展開・分配一括フロー内で dialog3_.show()（約 14106、19279）。
+データ制約：展開・分配関連パラメータ。同梱品・R3 状態。</td>
+<td>❌ createForm 内で代替</td>
+</tr>
+<tr>
+<td>5</td>
+<td>TaxDialog（dialog4_）</td>
+<td>メインで税区分取得時 getTaxDialogItem(tax)：dialog4_.setValue(lang_,
+tax, corporate_)、dialog4_.show()（約 19508～19510）。
+データ制約：税マスタ・単価マスタ。税率範囲。lang_/corporate_。</td>
+<td>❌ createForm 内で代替</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ConsignDialog（dialog5_）</td>
+<td>consignButton_… → displayConsignDialog()（約 19993～20000）。
+データ制約：配送先・出荷依頼先コード形式。CONSIGN_CNT_MAX。扱い区分・lang。</td>
+<td>❌ createForm 内で代替</td>
+</tr>
+<tr>
+<td>7</td>
+<td>OutinDialog（dialog6_）</td>
+<td>displayOutinDialog()（約 20592～20603）：coopeButton_.getState() が
+false かつ isOutInFalse() でないとき実行。
+データ制約：入出庫データ形式。OUT-IN 連携。oiData 構造。</td>
+<td>❌ createForm 内で代替</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ProductDialog（productDialog_）</td>
+<td>productButton_… → displayProductDialog()（約 6443～6498）。
+データ制約：製品コード・得意先別製品。販価マスタ存在時は更新、存在しなければ追加。</td>
+<td>⚠️ createForm 内で代替</td>
+</tr>
+<tr>
+<td>9</td>
+<td>ForwardRequestDialog（forwardDialog_）</td>
+<td>登録/更新フロー内で displayForwardDialog()（約 4125、9019）。
+データ制約：出荷依頼表 10 行制限。利益センター・試作判定。date/server
+パラメータ。</td>
+<td>❌ createForm 内で代替</td>
+</tr>
+<tr>
+<td>10</td>
+<td>RankDecisionDialog（rankDecisionDialog_）</td>
+<td>rankButton_… → displayRankDecisionDialog()（約 8768、7641～7664）。
+データ制約：ランク選択。得意先・機種・lang。</td>
+<td>❌ createForm 内で代替</td>
+</tr>
+<tr>
+<td>11</td>
+<td>FactoryNumberDialog（factoryDialog_）</td>
+<td>テーブル行の出荷済み数等操作後に
+displayFactoryNumberDialog：factoryDialog_.setValue(val)、factoryDialog_.show()（約
+22006～22009）。 データ制約：工場番号・出荷実績。枝番・数量。</td>
+<td>❌ createForm 内で代替</td>
+</tr>
+<tr>
+<td>12</td>
+<td>ReplyDialog（replyDialog_）</td>
+<td>フロー内で displayReplyDialog()（約
+7673、9055）：replyDialog_.Clear()；replyDialog_.show()。
+データ制約：表示のみ。回答区分選択。</td>
+<td>❌ createForm 内で代替</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Dialog1（waitDialog_）</td>
+<td>各所で RMI 呼出前に waitDialog_.show()、呼出後に
+waitDialog_.dispose()（約 7761、7819、8050、8138、8445、8498 等）。
+データ制約：なし。UI の待機表示のみ。</td>
+<td>❌ 対応なし</td>
+</tr>
+<tr>
+<td>14</td>
+<td>確認（displayConfirmDialog）</td>
+<td>メイン内で displayConfirmDialog(key)（約
+8506）。INSERT/UPDATE/DELETE/ERR/ERR1/CHECK/CLEAR/<em>1～</em>4、MSG_R3MOVEERR
+等。* <em>データ制約：key の MSG_</em>
+メッセージに依存。クライアント選択結果のみ。</td>
+<td>✅ createConfirm</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>（以上、SMS01206 分析レポート）</p>
+</body>
+</html>
