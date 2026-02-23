@@ -18,48 +18,29 @@
 
 ```
 {
-  "corporate": "X",
-  "key4": "26220AAT",
-  "type": "order",
-  "lang": "ja",
-  "key2": null,
-  "key": {
-    "key1": {
-      "26220AAU": [
-        ["d_product_code", "70RSCCD020"],
-        ["d_product_name", "SC5000-CD-0002"],
-        ["d_price_code", 8],
-        ["d_unit_price", 0.0000],
-        ["d_currency_code", "Y"],
-        ["d_order_number", 1],
-        ["d_factory_number", 0],
-        ["d_remain_number", 1],
-        ["d_comment_note", "__SMS_TABLE_NULL__"],
-        ["d_package_entry_no", "26220AAT"],
-        ["d_package_entry_sub_no", 0],
-        ["d_package_detail_no", 2]
-      ]
+  "lang" : "ja",
+  "type" : "order",
+  "corporate" : "X",
+  "keys" : [ [ "d_supply_code", "" ] ],
+  "key" : {
+    "key1" : {
+      "26223ACS" : [ [ "d_product_code", "70RSR102890" ], [ "d_product_name", "SR9930G0008" ], [ "d_price_code", 8 ], [ "d_unit_price", 0 ], [ "d_currency_code", "Y" ], [ "d_order_number", 1 ], [ "d_factory_number", 0 ], [ "d_remain_number", 1 ], [ "d_comment_note", "__SMS_TABLE_NULL__" ], [ "d_package_entry_no", "26223ACN" ], [ "d_package_entry_sub_no", 0 ], [ "d_package_detail_no", 1 ] ]
     },
-    "key2": {
-      "26220AAT": [
-        ["d_comment_note", "__SMS_TABLE_NULL__"],
-        ["d_package_number", 2]
-      ]
+    "key2" : {
+      "26223ACN" : [ [ "d_package_number", 3 ] ]
     },
-    "key3": {},
-    "key5": {},
-    "key6": {
-      "26220AAT": "",
-      "": ""
+    "key3" : { },
+    "key6" : {
+      "26223ACN" : "",
+      "26223ACP" : "",
+      "26223ACQ" : ""
     },
-    "key8": []
+    "key8" : [ ]
   },
-  "key7": [],
-  "keys": [
-    ["d_supply_code", ""],
-    ["d_turnover_month", 202603],
-    ["d_turnover_day", 17]
-  ]
+  "key2" : "",
+  "key4" : "26223ACN",
+  "key5" : { },
+  "key7" : [ ]
 }
 ```
 
