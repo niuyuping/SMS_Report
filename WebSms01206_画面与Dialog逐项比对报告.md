@@ -95,7 +95,7 @@
 | **样式** | エントリーNo・枝番・顧客注文No・最終更新日・稼働日・OUT-IN・明細（注文数/出荷済/出荷残/納期/出荷希望日/回答日）・備考・出荷確定数・発行/EXCEL/閉じる | forward-ref・forward-detail-box・forward-note・forward-factory-row・発行/EXCEL出力/閉じる | 无缺失 |
 | **组件交互** | getCustomerForwardReadTime, getMaxSalesUpdate, getActiveDate, getOutInData；OUT-IN編集→OutinDialog；出荷確定→setFactoryResults；発行→getForwadingListHtml；EXCEL→getExcelData | 均已实现 | 无缺失 |
 | **接口** | getForwadingListHtml, getExcelData, setFactoryResults, getOutInData, getCustomerForwardReadTime, getMaxSalesUpdate, getActiveDate | 均已调用 | 无缺失 |
-| **数据逻辑** | 明細行 index 与 key/key1/key2 对应 | forwardDialogRowIndex、forwardDialogNote、forwardDialogFactoryQty、confirmFactoryResults、exportExcel | 无缺失 |
+| **数据逻辑** | 明細行 index 与 key/key1/key2 对应 | forwardDialogRowIndex、forwardDialogNote、forwardDialogFactoryQty、confirmFactoryResults、exportForwardExcel | 无缺失 |
 
 ---
 

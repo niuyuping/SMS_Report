@@ -130,7 +130,7 @@
 | 出荷計画 | moveR3 | ✅ issueForwardPlan |
 | 出荷依頼書 | getForwadingListHtml | ✅ openForwardListHtml |
 | 出荷確定数 | setFactoryResults | ✅ confirmFactoryResults |
-| Excel 出力 | getExcelData | ✅ exportExcel |
+| Excel 出力 | getExcelData | ✅ exportForwardExcel |
 
 ---
 
