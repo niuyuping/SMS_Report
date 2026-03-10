@@ -305,29 +305,6 @@ d_package_entry_no = oya[0]
 AND d_package_entry_sub_no = oya[1] 
 AND d_package_detail_no = oya[2]
 ```
-{
-  "key": ["24122ABM", "0", "1"],
-  "key1": [
-    "d_entry_no",
-    "d_entry_sub_no",
-    "d_order_no",
-    "d_product_code",
-    "d_product_name",
-    "d_forward_date",
-    "d_reply_date",
-    "d_reply_code",
-    "d_on_board_date",
-    "d_inspect_date",
-    "d_order_number",
-    "d_unit_price",
-    "d_currency_name",
-    "d_currency_code"
-  ],
-  "corporate": "X",
-  "type": "order",
-  "lang": "ja"
-}
-
 
 **返回值**：`Hashtable`，key `ANS` 对应 `Vector`，元素为 `String[]`，顺序与 KEY1 一致。
 
@@ -438,6 +415,238 @@ excelButton 点击
        → 剪贴板.setContents(printData)
        → explorer.exe → Sms01206_01.html → Sms01206_01.xls
 ```
+
+### 3.6 整条逻辑链贯通解读
+
+本节从用户操作出发，按时间顺序串联 sms01288 → sms01206 → Excel 导出的完整数据流与决策分支。
+
+---
+
+#### 阶段 0：同梱品数据在 DB 中的形态
+
+**数据模型**（`order_tbl`）：
+
+| 记录类型 | package_number | d_package_entry_no | d_package_entry_sub_no | d_package_detail_no |
+|----------|----------------|--------------------|------------------------|---------------------|
+| **親**   | 非空（同梱件数） | 空                 | 空                     | 空                  |
+| **子**   | 空              | 親的 entry_no       | 親的 entry_sub_no      | 親的 detail_no      |
+
+- 親记录：`d_package_number` 表示该订单下同梱品数量。
+- 子记录：`d_package_entry_no` / `d_package_entry_sub_no` / `d_package_detail_no` 指向親，建立父子关系。
+- 写入来源：sms01288、PackageOrderClient 等；读取来源：sms01206 的 selectOrder（SMS01206.select / SMS012016.select42）。
+
+---
+
+#### 阶段 1：sms01288 中用户点击粉色エントリーNo
+
+**触发条件**（Sms01288.java `kidouEntryApplet` 约 2453-2466 行）：
+
+1. 点击列为 `G_ENTRY`（エントリーNo）
+2. 单元格边框颜色为 `Color.pink`
+3. `sdHoujinFlg_ == true`（法人权限）
+4. エントリーNo 非空
+
+**处理流程**：
+
+```
+kidouEntryApplet(entry, row)
+  → kidouOrderEntryNo(entry, row)
+  → 拼接 URL：stemapki.jsp?program_nm=sms01206&entry_no={entry}&entry_sub_no=0&...
+  → getAppletContext().showDocument(url, "_blank")
+```
+
+**结果**：新窗口打开 sms01206，URL 中携带 `entry_no`、`entry_sub_no=0`。
+
+---
+
+#### 阶段 2：sms01206 启动与数据加载
+
+**解析与初始化**：
+
+1. 从 URL 解析 `entry_no`、`entry_sub_no` → 存入 `firstEntry_`、`firstEntrySub_`
+2. `entryNo_.setText(firstEntry_)` 设置エントリーNo 输入框
+3. 调用 `searchEntryNo()` 执行 RMI 查询
+4. 成功后 `updateSw_ = UPDATE`，进入更新模式
+5. 若 `firstSw_ == "on"`，自动调用 `setSearchData(firstEntrySub_, "sub")` 显示明细
+
+**数据取得**（`setSearchData` → 约 4990 行）：
+
+```
+remoteObject_.getOrder(prmHash)
+  → OrderEntryNo_s.getOrder
+  → remoteObject_.selectOrder(hash)  // SMS01206.select
+  → SQL 查询 order_tbl，返回 OrderLine01[] lines
+  → 各明细行 lines[i].get("d_package_number") 填入 detailHash.put("20", ...)
+  → createOneData 生成 data1[i]，data1[i][20] 即为 d_package_number
+  → setMidashiLabel(data1[i]) 设定 oyaPackege_ / koPackege_
+```
+
+**此时**：画面已拿到 `d_package_number`、`d_package_entry_no` 等，用于同梱品标记显示。
+
+---
+
+#### 阶段 3：用户点击注文数列（NO_DETAIL）
+
+**触发条件**（OrderEntryNo.java 约 9006-9024 行）：
+
+1. `column == NO_DETAIL`（注文数，第一列）
+2. `updateSw_.equals(UPDATE)`
+3. `isItemAri(iraihyouHoujin_, corporate_)`（法人 X/H/O/W/N/P 等）
+4. `!isFactoryNumberUpdate()`（非試作出荷）
+5. 枝番在 1～10 范围内（出荷依頼表仅支持枝番 10 以内）
+
+**处理**：
+
+```
+displayForwardDialog()
+  → forwardDialog_.setValue(...)
+  → forwardDialog_.show()
+```
+
+**结果**：弹出「出荷依頼票出力 ダイアログ」，用户可选择「確認」（HTML 印刷）或「to excel」。
+
+---
+
+#### 阶段 4：用户点击「to excel」
+
+**ForwardRequestDialog**（约 623-638 行）：
+
+```java
+excel_ = true;
+confirm_ = false;
+dispose();
+```
+
+**displayForwardDialog 后续**（约 4211-4219 行）：
+
+```java
+if (forwardDialog_.isExcel()) {
+    key[0] = label;   // 当前枝番对应 entry_no
+    key[1] = sub;     // entry_sub_no
+    toExcel(key, fdata, riekiCenterItem, sRiyuu);
+}
+```
+
+**此时**：`key` 为当前选中明细的 `[entry_no, entry_sub_no]`，即 Excel 导出的查询键。
+
+---
+
+#### 阶段 5：toExcel 主流程
+
+**5.1 取得 Excel 用明细**
+
+```
+getExcelData(key)
+  → remoteObject_.getExcelData(prm)
+  → OrderEntryNo_s.getExcelData
+  → remoteObject_.selectOrder(hash)  // SMS012016.select42
+  → WHERE d_entry_no = key[0] AND d_entry_sub_no = key[1]
+  → 返回 exVector，exdata = exVector.elementAt(0)
+```
+
+**5.2 同梱品判定**（约 12446-12449 行）：
+
+```java
+String packageNo = exdata[getExcelItemIndex("d_package_number")];
+if (!isEmpty(packageNo)) { doukon = true; }
+```
+
+- `exdata` 来自 `getExcelData`，列顺序由 `excelItems_` 定义，`d_package_number` 对应 DB 的 `package_number`。
+- `doukon = true` 表示当前行为同梱品親，需要追加同梱品列表。
+
+**5.3 拼装 printData**
+
+| 步骤 | 方法 | 内容 |
+|------|------|------|
+| 1 | editExcel1 | 表头、同梱品标记、列名等 |
+| 2 | editExcel2 | 明细表（最多 10 行） |
+| 3 | editExcel3 或 editExcel4 | 一般/試作机种差异区 |
+| 4 | editExcel5 | 出荷日回答、利益センター等 |
+| 5 | **editDoukonExcel**（同梱品时） | 親データ + 子データ列表 |
+
+**5.4 同梱品子数据取得**（editDoukonExcel 约 13198-13228 行）
+
+```
+exdata（親）→ 取出 d_entry_no, d_entry_sub_no, d_detail_no
+  → oyaEntry[0] = getCutEntryNo(exdata["d_entry_no"])
+  → oyaEntry[1] = exdata["d_entry_sub_no"]
+  → oyaEntry[2] = exdata["d_detail_no"]
+  → prm.put(KEY, oyaEntry)
+  → remoteObject_.getKoOrder(prm)
+```
+
+**OrderEntryNo_s.getKoOrder**（约 2108-2152 行）：
+
+```
+prm.get(KEY) → oya[]
+  → WHERE d_package_entry_no = oya[0] 
+        AND d_package_entry_sub_no = oya[1] 
+        AND d_package_detail_no = oya[2]
+  → remoteObject_.selectOrder(hash)  // SMS01206.select1
+  → 返回子エントリー的 OrderLine01[] lines
+  → 按 koExcelItems_ 列名取出，组装 Vector<String[]>
+  → ansHash.put(ANS, vector)
+```
+
+**逻辑含义**：以親的 `entry_no / entry_sub_no / detail_no` 为条件，在 order_tbl 中查找所有 `d_package_*` 指向该親的子记录。
+
+**5.5 输出与打开**
+
+```
+printData += editDoukonExcel1(oyaData, midashi1)   // 親 1 行
+printData += editDoukonExcel2(koVector, midashi1)  // 子 N 行
+  → Clipboard.setContents(printData)
+  → explorer.exe "http://{server}/excel/Sms01206/Sms01206_01.html"
+  → HTML 重定向到 Sms01206_01.xls
+```
+
+用户在 Excel 中粘贴（Ctrl+V）即可将数据填入模板。
+
+---
+
+#### 阶段 6：整条链路中的数据流小结
+
+```
+order_tbl.package_number / d_package_*
+    │
+    ├─ 画面表示：getOrder → detailHash["20"] → setMidashiLabel（oyaPackege_/koPackege_）
+    │
+    └─ Excel 导出：
+         ├─ getExcelData → exdata["d_package_number"] → doukon 判定
+         └─ doukon 时：editDoukonExcel
+              ├─ 親：exdata（来自 getExcelData 的当前行）
+              └─ 子：getKoOrder(親的 entry/sub/detail) → koVector
+                   → WHERE d_package_entry_no/sub_no/detail_no = 親
+```
+
+---
+
+#### 关键决策点汇总
+
+| 位置 | 条件 | 分支 |
+|------|------|------|
+| sms01288 表格点击 | 粉色 + sdHoujinFlg_ | 打开 sms01206 |
+| sms01206 注文数列点击 | UPDATE + iraihyouHoujin_ + 非試作出荷 | 弹出出荷依頼票ダイアログ |
+| ダイアログ关闭 | isExcel() | 进入 toExcel |
+| toExcel 内 | d_package_number 非空 | 调用 editDoukonExcel |
+| editDoukonExcel | - | getKoOrder 查子エントリー，拼入 printData |
+
+---
+
+#### 代码引用速查
+
+| 环节 | 文件 | 方法/行 |
+|------|------|---------|
+| sms01288 点击判定 | Sms01288.java | kidouEntryApplet 2453, kidouOrderEntryNo 2469 |
+| sms01206 参数接收 | OrderEntryNo.java | firstEntry_, searchEntryNo |
+| 注文数列点击 | OrderEntryNo.java | 9006-9019, displayForwardDialog 4125 |
+| to excel 按钮 | ForwardRequestDialog.java | excelButton 623-638 |
+| toExcel 主流程 | OrderEntryNo.java | toExcel 12423-12493 |
+| 同梱判定 | OrderEntryNo.java | 12446-12449 |
+| editDoukonExcel | OrderEntryNo.java | editDoukonExcel 13198-13233 |
+| getKoOrder | OrderEntryNo_s.java | getKoOrder 2108-2152 |
+| getOrder 中 d_package_number | OrderEntryNo_s.java | detailItems_[20], 866-870 |
+| getExcelData | OrderEntryNo_s.java | getExcelData → SMS012016.select42 |
 
 ---
 
